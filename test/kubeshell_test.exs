@@ -13,6 +13,17 @@ defmodule KubeShellTest do
     check_start_end(commands)
   end
 
+  test "exec help" do 
+    o = KubeShell.exec("help")
+    assert o == "Show help text for commands."
+
+    o = KubeShell.exec("help ?")
+    assert o == "?: Show help text for a command."
+
+    o = KubeShell.exec("help ? foo bar baz")
+    assert o == "?: Show help text for a command."
+  end
+
   def check_start_end(cmd) when length(cmd) > 0 do
     c = hd(cmd)
     o = KubeShell.help(c)
@@ -27,12 +38,6 @@ defmodule KubeShellTest do
     check_start_end(tl(cmd))
   end
 
-  def check_start_end(cmd) do
-  end
-
-  # This is just a lame practice test
-  test "has kubectl" do
-    {_, r} = System.cmd "kubectl", ["version"]
-    assert r == 0
+  def check_start_end(_) do
   end
 end

@@ -27,6 +27,6 @@ defmodule KubeShell.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:poison, "~> 2.0"}]
   end
 end
