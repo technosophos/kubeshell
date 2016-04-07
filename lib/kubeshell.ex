@@ -99,6 +99,15 @@ defmodule KubeShell do
   def ls(path) do
     parts = Path.split(path)
     case parts do
+      [ns, kind, name]->
+        {out, code} = kubectl(["-o", "json", "--namespace", ns, "get", kind, name])
+        case code do
+          x when x > 0 ->
+            IO.puts "Failed with exit code #{x}"
+          _->
+            j = json_parse(out)
+            IO.puts j["metadata"]["name"]
+        end
       [ns, kind]->
         {out, code} = kubectl(["-o", "json", "--namespace", ns, "get", kind])
         case code do
@@ -196,7 +205,9 @@ defmodule KubeShell do
   def kubectl(args) do
     kcmd = System.get_env("KUBESHELL_KUBECTL") || "kubectl"
     pretty = Enum.join(args, " ")
+    IO.puts IO.ANSI.blue()
     IO.puts "\t[ #{kcmd} #{pretty} ]"
+    IO.puts IO.ANSI.default_color()
     System.cmd(kcmd, args)
   end
 
