@@ -1,12 +1,15 @@
 defmodule Command do
   @callback exec(list, map) :: any
+  @callback help() :: String.t
 end
 
 defmodule Cd do
+  @behaviour Command
+
   def help() do
     "cd: Change context."
   end
-  def exec(args, _) do
+  def exec(args, _context) do
     case length args do
       0->
         "cd to top level context"
@@ -18,6 +21,8 @@ defmodule Cd do
 end
 
 defmodule Cat do
+  @behaviour Command
+
   def help() do
     "cat: Display the contents of a resource."
   end
@@ -78,11 +83,13 @@ defmodule Cat do
 end
 
 defmodule Ls do
+  @behaviour Command
+
   def help() do
     "ls: List the items in the current context."
   end
 
-  def exec(args, context) do
+  def exec(args, _context) do
     case length args do
       0 ->
         ls

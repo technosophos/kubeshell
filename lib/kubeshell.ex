@@ -45,6 +45,8 @@ defmodule KubeShell do
         Cd.exec(args, context)
       "cat" ->
         Cat.exec(args, context)
+      _ ->
+        IO.puts "Command not found: #{cmd}"
     end
   end
 
@@ -72,6 +74,4 @@ defmodule KubeShell do
       "No help for #{cmd}."
     end
   end
-
-
 end
